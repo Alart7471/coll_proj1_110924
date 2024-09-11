@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="index.css">
+  <title>Библиотека Мат</title>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+  <div id="app">
+    <h1>{{lang_data.title[page_language]}}</h1>
+    <Button @click="changeLang">{{lang_data.language[page_language]}}</Button>
+
+    <div>
+      <h2>{{lang_data.add_a_book[page_language]}}</h2>
+      <input v-model="newBook.title" :placeholder="lang_data.book_title[page_language]" />
+      <input v-model="newBook.author" :placeholder="lang_data.book_author[page_language]" />
+      <button @click="addBook">{{lang_data.add_a_book[page_language]}}</button>
+    </div>
+
+    <div>
+      <h2>{{lang_data.books_list[page_language]}}</h2>
+      <ul>
+        <li v-for="book in books" :key="book._id">
+          <strong>{{ book.title }}</strong> {{ lang_data.for_by[page_language] }} {{ book.author }}
+          <button @click="showTotalTime(book._id)">{{lang_data.show_total_time[page_language]}}</button>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <script src="index.js" type="module"></script>
+</body>
+</html>
