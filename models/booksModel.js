@@ -6,6 +6,7 @@ const bookSchema = new mongoose.Schema({
   readers: Array, // Список читателей книги
 });
 
+
 const Book = mongoose.model('Book', bookSchema);
 
 module.exports = Book;

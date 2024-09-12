@@ -5,6 +5,7 @@ const readerSchema = new mongoose.Schema({
   days: { type: Number, required: true },
 });
 
+
 const Readers = mongoose.model('Readers', readerSchema);
 
 module.exports = Readers;

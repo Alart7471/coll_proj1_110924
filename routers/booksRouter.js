@@ -63,5 +63,4 @@ router.get('/:id/total-time', async (req, res) => {
     res.status(500).json({ message: 1003 });
   }
 });
-
 module.exports = router;
