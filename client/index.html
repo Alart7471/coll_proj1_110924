@@ -18,13 +18,40 @@
       <input v-model="newBook.author" :placeholder="lang_data.book_author[page_language]" />
       <button @click="addBook">{{lang_data.add_a_book[page_language]}}</button>
     </div>
-
+    <div v-if="showBookLabel" id="bookLabel" class="bookLabel">
+      <button style="position: absolute; top: 0; right: 0;" @click="closeModal">&times;</button>
+      <h2>{{bookInLabel.title}}</h2>
+      <p>{{bookInLabel.author}}</p>
+      <p>{{bookInLabel._id}}</p>
+      <ul>
+        <li><span>Имя</span><span>Кол-во дней</span></li>
+        <li v-for="reader in bookInLabel.readers" :key="reader._id">
+          <span>{{reader.lastName}}</span><span>{{reader.daysBorrowed}}</span>
+        </li>
+      </ul>
+      <button @click="showBookLabel = false">Close</button>
+      <button @click="showTotalTime(bookInLabel._id)">{{lang_data.show_total_time[page_language]}}</button>
+      <button @click="showReaderModal(bookInLabel._id)">{{lang_data.book_add_reader[page_language]}}</button>
+      <button @click="">Edit</button>
+      <button @click="">Delete</button>
+    </div>
+    <div v-if="showReaderLabel" id="readerLabel" class="readerLabel">
+        <button style="position: absolute; top: 0; right: 0;" @click="closeModal">&times;</button>
+        <h2>{{bookInLabel.title}}</h2>
+        <p>{{bookInLabel.author}}</p>
+        <p>{{bookInLabel._id}}</p>
+        <h3>{{lang_data.newReader_title[page_language]}}</h3>
+        <label>{{lang_data.newReader_lastName[page_language]}}<input type="text" v-model="newReader.lastName" :placeholder=lang_data.newReader_lastName[page_language]></label>
+        <label>{{lang_data.newReader_days[page_language]}}<input type="number" v-model="newReader.daysBorrowed" :placeholder=lang_data.newReader_days[page_language]></label>
+        <button @click="addReader()">{{lang_data.newReader_confirm[page_language]}}</button>
+      </div>
     <div>
       <h2>{{lang_data.books_list[page_language]}}</h2>
       <ul>
         <li v-for="book in books" :key="book._id">
           <strong>{{ book.title }}</strong> {{ lang_data.for_by[page_language] }} {{ book.author }}
-          <button @click="showTotalTime(book._id)">{{lang_data.show_total_time[page_language]}}</button>
+          <button @click="showBookLabel = true; bookInLabel = book">{{lang_data.book_show_label[page_language]}}</button>
+
         </li>
       </ul>
     </div>

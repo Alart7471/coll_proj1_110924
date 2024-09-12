@@ -18,6 +18,13 @@ new Vue({
         alert_total_time: ['Total usage time', 'Общее время использования книги'],
         alert_total_time_days: ['days', 'дней'],
         alert_req_book_added: ['Book added successfully', 'Книга добавлена успешно'],
+        book_show_label: ['Show Book Info', 'Показать информацию о книге'],
+        book_add_reader: ['Add Reader', 'Добавить читателя'],
+        newReader_title: ['New Reader', 'Новый читатель'],
+        newReader_lastName: ['Last Name', 'Фамилия'],
+        newReader_days: ['Days', 'Кол-во дней'],
+        newReader_confirm: ['Add', 'Добавить'],
+
     },
     error_data: {
         1000: ['Error adding book', 'Ошибка добавления книги'],
@@ -27,14 +34,22 @@ new Vue({
         0: ["Title and author are required", "Заполните название и автора"],
         1: ['This book already exists', 'Эта книга уже существует'],
         2: ['Book not found', 'Книга не найдена'],
-
-
     },
     books: [],
     newBook: { title: '', author: '' },
+    showBookLabel: false,
+    bookInLabel: { },
+    showReaderLabel: false,
+    newReader: {},
+    newReaderBookId: '',
   },
   created() {
     this.fetchBooks();
+    window.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        this.closeModal();
+      }
+    })
   },
   methods: {
     async fetchBooks() {
@@ -85,6 +100,59 @@ new Vue({
 
     changeLang(){
         (this.page_language == 1) ? this.page_language = 0 : this.page_language = 1
+    },
+    closeModal(){
+        if(this.showReaderLabel){
+            this.showReaderLabel = false
+            this.newReader = {}
+            this.newReaderBookId = ''
+            return
+        }
+        if(this.showBookLabel){
+            this.showBookLabel = false
+            this.bookInLabel = {}
+            return
+        }
+    },
+    showReaderModal(bookId){
+        if(!this.showBookLabel){return}
+        this.showReaderLabel = true
+        this.newReaderBookId = bookId
+    },
+    async addReader(){
+        try {
+          await axios
+          .post(`/api/books/${this.newReaderBookId}/reader`, {
+            lastName: this.newReader.lastName,
+            daysBorrowed: this.newReader.days
+          }, {
+            validateStatus: function (status) {
+              return status >= 200 && status < 500; 
+            },
+          })
+          .then((response) => {
+            switch(response.status){
+              case 200:
+                alert(this.lang_data.alert_req_book_added[this.page_language]);
+                this.fetchBooks();
+                this.closeModal();
+                break;
+              case 400:
+                console.log(response.data.message);
+                alert(this.error_data[Number(response.data.message)][this.page_language]);
+                break;
+              case 404:
+                alert(this.error_data[Number(response.data.message)][this.page_language]);
+                break;
+              case 500:
+                alert(this.error_data[Number(response.data.message)][this.page_language]);
+                break;
+            }
+          });
+        } catch (error) {
+          console.error('Error adding reader:', error);
+        }
     }
   }
 });
+

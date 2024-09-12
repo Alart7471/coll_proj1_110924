@@ -8,9 +8,10 @@ const readerSchema = new mongoose.Schema({
 const bookSchema = new mongoose.Schema({
   title: { type: String, unique: true },
   author: String,
-  readers: [readerSchema], // Список читателей книги
+  readers: Array, // Список читателей книги
 });
 
+const Readers = mongoose.model('Readers', readerSchema);
 const Book = mongoose.model('Book', bookSchema);
 
 module.exports = Book;

@@ -1,2 +1,30 @@
 body { font-family: Arial, sans-serif; margin: 20px; }
 input { margin: 5px 0; }
+
+.bookLabel{
+    position: fixed;
+    top: 20%;
+    left: 10%;
+    width: 80%;
+    height: 60%;
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 10px;
+    background-color: aliceblue;
+    text-align: center;
+}
+.readerLabel{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50%;
+    height: 30%;
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 10px;
+    background-color:bisque;
+    text-align: center;
+}
