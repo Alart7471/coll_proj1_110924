@@ -3,7 +3,7 @@ import Vue from 'https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.esm.browser.js
 new Vue({
   el: '#app',
   data: {
-    page_language: '0',//0 - 'ru', 1 - 'en'
+    page_language: '1',//0 - 'ru', 1 - 'en'
     max_languages: 2,
     lang_data: {
         language: ['Language', 'Язык'],
@@ -24,6 +24,7 @@ new Vue({
         newReader_lastName: ['Last Name', 'Фамилия'],
         newReader_days: ['Days', 'Кол-во дней'],
         newReader_confirm: ['Add', 'Добавить'],
+        alert_req_reader_added: ['Reader added successfully', 'Читатель добавлен успешно'],
 
     },
     error_data: {
@@ -73,11 +74,13 @@ new Vue({
           .then((response) => {
             switch(response.status){
               case 201:
-                alert(this.alert_req_book_added[this.page_language]);
+                alert(this.lang_data.alert_req_book_added[this.page_language]);
+                this.newBook = { };
                 this.fetchBooks();
                 break;
               case 400:
                 console.log(response.data.message);
+                console.log(this.error_data[Number(response.data.message)][this.page_language])
                 alert(this.error_data[Number(response.data.message)][this.page_language]);
                 break;
               case 500:
@@ -120,21 +123,19 @@ new Vue({
         this.newReaderBookId = bookId
     },
     async addReader(){
+        console.log(this.newReader)
         try {
           await axios
-          .post(`/api/books/${this.newReaderBookId}/reader`, {
-            lastName: this.newReader.lastName,
-            daysBorrowed: this.newReader.days
-          }, {
+          .post(`/api/books/${this.newReaderBookId}/reader`, this.newReader, {
             validateStatus: function (status) {
               return status >= 200 && status < 500; 
             },
           })
-          .then((response) => {
+          .then(async (response) => {
             switch(response.status){
               case 200:
-                alert(this.lang_data.alert_req_book_added[this.page_language]);
-                this.fetchBooks();
+                alert(this.lang_data.alert_req_reader_added[this.page_language]);
+                await this.fetchBooks();
                 this.closeModal();
                 break;
               case 400:

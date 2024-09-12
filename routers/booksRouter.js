@@ -1,5 +1,6 @@
 const express = require('express');
 const Book = require('../models/booksModel');
+const Reader = require('../models/readersModel');
 const router = express.Router();
 
 // Получить все книги
@@ -30,18 +31,22 @@ router.post('/', async (req, res) => {
 // Добавить читателя к книге
 router.post('/:id/reader', async (req, res) => {
   try {
-    const { lastName, daysBorrowed } = req.body;
+    console.log(req.body)
+    const { lastname, days } = req.body;
     const book = await Book.findById(req.params.id);
     if (!book) return res.status(404).json({ message: 2 });
 
-    const newReader = { lastName, daysBorrowed };
+    // const book = new Book({ title, author, readers: [] });
+    const newReader = new Reader({ lastname, days });
+    console.log(newReader)
     await newReader.save() 
 
     book.readers.push(newReader);
     await book.save();
 
-    res.status(200).json(book);
+    res.status(200).json({ message: 3 });
   } catch (error) {
+    // console.log(error);
     res.status(500).json({ message: 1002 });
   }
 });

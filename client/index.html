@@ -23,12 +23,17 @@
       <h2>{{bookInLabel.title}}</h2>
       <p>{{bookInLabel.author}}</p>
       <p>{{bookInLabel._id}}</p>
-      <ul>
-        <li><span>Имя</span><span>Кол-во дней</span></li>
-        <li v-for="reader in bookInLabel.readers" :key="reader._id">
-          <span>{{reader.lastName}}</span><span>{{reader.daysBorrowed}}</span>
+      <ul class="table-list">
+        <li class="table-header">
+          <span>{{ lang_data.newReader_lastName[page_language] }}</span>
+          <span>{{ lang_data.newReader_days[page_language] }}</span>
+        </li>
+        <li v-for="reader in bookInLabel.readers" :key="reader.lastname" class="table-row">
+          <span>{{ reader.lastname }}</span>
+          <span>{{ reader.days }}</span>
         </li>
       </ul>
+      
       <button @click="showBookLabel = false">Close</button>
       <button @click="showTotalTime(bookInLabel._id)">{{lang_data.show_total_time[page_language]}}</button>
       <button @click="showReaderModal(bookInLabel._id)">{{lang_data.book_add_reader[page_language]}}</button>
@@ -41,8 +46,8 @@
         <p>{{bookInLabel.author}}</p>
         <p>{{bookInLabel._id}}</p>
         <h3>{{lang_data.newReader_title[page_language]}}</h3>
-        <label>{{lang_data.newReader_lastName[page_language]}}<input type="text" v-model="newReader.lastName" :placeholder=lang_data.newReader_lastName[page_language]></label>
-        <label>{{lang_data.newReader_days[page_language]}}<input type="number" v-model="newReader.daysBorrowed" :placeholder=lang_data.newReader_days[page_language]></label>
+        <label>{{lang_data.newReader_lastName[page_language]}}<input type="text" v-model="newReader.lastname" :placeholder=lang_data.newReader_lastName[page_language]></label>
+        <label>{{lang_data.newReader_days[page_language]}}<input type="number" v-model="newReader.days" :placeholder=lang_data.newReader_days[page_language]></label>
         <button @click="addReader()">{{lang_data.newReader_confirm[page_language]}}</button>
       </div>
     <div>
