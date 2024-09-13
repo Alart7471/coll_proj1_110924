@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="index.css">
-  <title>Библиотека Мат</title>
+  <title>Библиотека Матухин</title>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
@@ -51,7 +51,7 @@
         <button @click="addReader()">{{lang_data.newReader_confirm[page_language]}}</button>
       </div>
     <div>
-      <h2>{{lang_data.books_list[page_language]}}</h2>
+      <h2>{{lang_data.books_list[page_language]}} {{books.length}}</h2>
       <ul>
         <li v-for="book in books" :key="book._id">
           <strong>{{ book.title }}</strong> {{ lang_data.for_by[page_language] }} {{ book.author }}

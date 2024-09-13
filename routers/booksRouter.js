@@ -57,7 +57,7 @@ router.get('/:id/total-time', async (req, res) => {
     const book = await Book.findById(req.params.id);
     if (!book) return res.status(404).json({ message: 2 });
 
-    const totalTime = book.readers.reduce((acc, reader) => acc + reader.daysBorrowed, 0);
+    const totalTime = book.readers.reduce((acc, reader) => acc + reader.days, 0);
     res.json({ totalTime });
   } catch (error) {
     res.status(500).json({ message: 1003 });
