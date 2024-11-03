@@ -27,18 +27,20 @@
         <li class="table-header">
           <span>{{ lang_data.newReader_lastName[page_language] }}</span>
           <span>{{ lang_data.newReader_days[page_language] }}</span>
+          <span>{{ lang_data.book_actions[page_language] }}</span>
         </li>
         <li v-for="reader in bookInLabel.readers" :key="reader.lastname" class="table-row">
           <span>{{ reader.lastname }}</span>
           <span>{{ reader.days }}</span>
+          <span><button @click="deleteReader(bookInLabel._id, reader._id)">{{ lang_data.book_action_delete[page_language] }}</button><button disabled>{{ lang_data.book_action_edit[page_language] }}</button></span>
         </li>
       </ul>
       
       <button @click="showBookLabel = false">Close</button>
       <button @click="showTotalTime(bookInLabel._id)">{{lang_data.show_total_time[page_language]}}</button>
       <button @click="showReaderModal(bookInLabel._id)">{{lang_data.book_add_reader[page_language]}}</button>
-      <button @click="">Edit</button>
-      <button @click="">Delete</button>
+      <button @click="" disabled>Edit</button>
+      <button @click="deleteBook(bookInLabel._id)">Delete</button>
     </div>
     <div v-if="showReaderLabel" id="readerLabel" class="readerLabel">
         <button style="position: absolute; top: 0; right: 0;" @click="closeModal">&times;</button>

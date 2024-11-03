@@ -63,4 +63,29 @@ router.get('/:id/total-time', async (req, res) => {
     res.status(500).json({ message: 1003 });
   }
 });
+
+// Удалить книгу
+router.delete('/:id', async (req, res) => {
+  try {
+    const book = await Book.findByIdAndDelete(req.params.id);
+    if (!book) return res.status(404).json({ message: 2 });
+    res.json({ message: 3 });
+  } catch (error) {
+    res.status(500).json({ message: 1001 });
+  }
+});
+// Удалить читателя
+router.delete('/:id/reader/:readerId', async (req, res) => {
+  try {
+    const book = await Book.findById(req.params.id);
+    if (!book) return res.status(404).json({ message: 2 });
+    const readerIndex = book.readers.findIndex(reader => reader._id.toString() === req.params.readerId);
+    if (readerIndex === -1) return res.status(404).json({ message: 4 });
+    book.readers.splice(readerIndex, 1);
+    await book.save();
+    res.json({ message: 5 });
+  } catch (error) {
+    res.status(500).json({ message: 1001 });
+  }
+})
 module.exports = router;

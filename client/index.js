@@ -13,6 +13,9 @@ new Vue({
         books_list: ['Books List', 'Список книг'],
         book_title: ['Book Title', 'Название книги'],
         book_author: ['Author', 'Автор'],
+        book_actions: ['Actions', 'Действия'],
+        book_action_delete: ['Delete', 'Удалить'],
+        book_action_edit: ['Edit', 'Редактировать'],
         show_total_time: ['Show Total Usage Time', 'Показать общее время использования книги'],
         for_by: ['by', 'автора'],
         alert_total_time: ['Total usage time', 'Общее время использования книги'],
@@ -25,7 +28,8 @@ new Vue({
         newReader_days: ['Days', 'Кол-во дней'],
         newReader_confirm: ['Add', 'Добавить'],
         alert_req_reader_added: ['Reader added successfully', 'Читатель добавлен успешно'],
-
+        alert_req_book_deleted: ['Book deleted successfully', 'Книга удалена успешно'],
+        alert_req_reader_deleted: ['Reader deleted successfully', 'Читатель удален успешно'],
     },
     error_data: {
         1000: ['Error adding book', 'Ошибка добавления книги'],
@@ -153,6 +157,68 @@ new Vue({
         } catch (error) {
           console.error('Error adding reader:', error);
         }
-    }
+    },
+    async deleteBook(id){
+      try {
+        await axios
+        .delete(`/api/books/${id}`, {
+          validateStatus: function (status) {
+            return status >= 200 && status < 500; 
+          },
+        })
+        .then((response) => {
+          switch(response.status){
+            case 200:
+              alert(this.lang_data.alert_req_book_deleted[this.page_language]);
+              this.fetchBooks();
+              this.closeModal();
+              break;
+            case 400:
+              console.log(response.data.message);
+              alert(this.error_data[Number(response.data.message)][this.page_language]);
+              break;
+            case 404:
+              alert(this.error_data[Number(response.data.message)][this.page_language]);
+              break;
+            case 500:
+              alert(this.error_data[Number(response.data.message)][this.page_language]);
+              break;
+          }
+        });
+      } catch (error) {
+        console.error('Error deleting book:', error);
+      }
+    },
+    async deleteReader(bookId, readerId){
+      try {
+        await axios
+        .delete(`/api/books/${bookId}/reader/${readerId}`, {
+          validateStatus: function (status) {
+            return status >= 200 && status < 500; 
+          },
+        })
+        .then((response) => {
+          switch(response.status){
+            case 200:
+              alert(this.lang_data.alert_req_reader_deleted[this.page_language]);
+              this.fetchBooks();
+              this.closeModal();
+              break;
+            case 400:
+              console.log(response.data.message);
+              alert(this.error_data[Number(response.data.message)][this.page_language]);
+              break;
+            case 404:
+              alert(this.error_data[Number(response.data.message)][this.page_language]);
+              break;
+            case 500:
+              alert(this.error_data[Number(response.data.message)][this.page_language]);
+              break;
+          }
+        });
+      } catch (error) {
+        console.error('Error deleting reader:', error);
+      }
+    },
   }
 });
